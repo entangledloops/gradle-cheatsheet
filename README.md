@@ -46,7 +46,7 @@ Then run `gradle wrapper`. You may now call Gradle through the wrapper, for exam
 ## Variables
 
 [According to the docs](https://docs.gradle.org/current/userguide/writing_build_scripts.html#sec:declaring_variables), there are only two kinds of variables that can be declared in a buildscript: local and extra properties, and every Gradle domain object has an `extra` property.
-[Elsewhere](https://docs.gradle.org/current/userguide/kotlin_dsl.html#using_the_container_api), it is clarified that objects implementing the `ExtensionAware` interface have extra properties. (See also [`ExtraPropertiesExtension`](https://docs.gradle.org/current/dsl/org.gradle.api.plugins.ExtraPropertiesExtension.html)). This description feels misleading, because "extra properties" aren't really a variable type&mdash;the `extra` field is just a container of objects. The idea here is that these are the only ways to persist data in your buildscript.
+[Elsewhere](https://docs.gradle.org/current/userguide/kotlin_dsl.html#using_the_container_api), it is clarified that objects implementing the `ExtensionAware` interface have extra properties. (See also [`ExtraPropertiesExtension`](https://docs.gradle.org/current/dsl/org.gradle.api.plugins.ExtraPropertiesExtension.html).) This description feels misleading, because "extra properties" aren't really a variable type&mdash;the `extra` field is just a container of objects. The idea here is that these are the only ways to persist data in your buildscript.
 
 Example partly taken from [Gradle docs](https://docs.gradle.org/current/userguide/writing_build_scripts.html#sec:extra_properties):
 
