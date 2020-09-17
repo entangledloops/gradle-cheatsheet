@@ -6,8 +6,8 @@ You use Gradle to build *projects*, which are composed of *tasks*.
 These are the two basic building blocks. A task should be a single piece of work (e.g. copy a file).
 You declare the projects in `settings.gradle.kts`, for example:
 
-	rootProject.name = "MyKillerApp"
-	include("core", "desktop", "android", "ios", "ios:some-other-subproject")
+    rootProject.name = "MyKillerApp"
+    include("core", "desktop", "android", "ios", "ios:some-other-subproject")
 
 There is a root project above all other projects in the project tree.
 It's best practice to have your directory structure mirror the logical organization of the project tree.
@@ -36,10 +36,10 @@ This is called the Gradle Wrapper, and you'll typically see one for Linux/macOS 
 The wrapper will download a fixed version of Gradle if it isn't already present in the local directory (in `.gradle`).
 To generate the wrapper for a particular version of gradle before distrubution, you can add this to your `build.gradle.kts`:
 
-	// configure existing wrapper task
-	tasks.withType<Wrapper> {
-	    gradleVersion = "6.6.1"
-	}
+    // configure existing wrapper task
+    tasks.withType<Wrapper> {
+        gradleVersion = "6.6.1"
+    }
 
 Then run `gradle wrapper`. You may now call Gradle through the wrapper, for example: `./gradlew tasks`
 
@@ -50,54 +50,54 @@ Then run `gradle wrapper`. You may now call Gradle through the wrapper, for exam
 
 Example partly taken from [Gradle docs](https://docs.gradle.org/current/userguide/writing_build_scripts.html#sec:extra_properties):
 
-	val localVar = "a local var"
+    val localVar = "a local var"
 
-	sourceSets.all { extra["purpose"] = null }
+    sourceSets.all { extra["purpose"] = null }
 
-	sourceSets {
-	    main {
-	        extra["purpose"] = "production"
-	    }
-	    test {
-	        extra["purpose"] = "test"
-	    }
-	    create("plugin") {
-	        extra["purpose"] = "production"
-	    }
-	}
+    sourceSets {
+        main {
+            extra["purpose"] = "production"
+        }
+        test {
+            extra["purpose"] = "test"
+        }
+        create("plugin") {
+            extra["purpose"] = "production"
+        }
+    }
 
 Note that you can also grab a reference to an existing property via
 
-	val someProp by extra
+    val someProp by extra
 
 or simultaneously declare/initialize and grab a reference
 
-	val someProp by extra("some prop's value")
+    val someProp by extra("some prop's value")
 
 or specify type
 
-	val someString: String by extra
+    val someString: String by extra
 
 ## Buildscript
 
 In the past, there was a `buildscript {}` block used to acquire external plugings. This is no longer recommended.
 Instead, add a `pluginManagement` block to `settings.gradle.kts`.
 
-	pluginManagement {
-	    repositories {
-	        gradlePluginPortal()
-	        google()
-	        jcenter()
-	        mavenCentral()
-	    }
-	    resolutionStrategy {
-	        eachPlugin {
-	            if (requested.id.namespace == "com.android" || requested.id.name == "kotlin-android-extensions") {
-	                useModule("com.android.tools.build:gradle:3.5.2")
-	            }
-	        }
-	    }
-	}
+    pluginManagement {
+        repositories {
+            gradlePluginPortal()
+            google()
+            jcenter()
+            mavenCentral()
+        }
+        resolutionStrategy {
+            eachPlugin {
+                if (requested.id.namespace == "com.android" || requested.id.name == "kotlin-android-extensions") {
+                    useModule("com.android.tools.build:gradle:3.5.2")
+                }
+            }
+        }
+    }
 
 The `useModule` line corresponds to the `classpath` string we previously used in the `buildscript {}` block.
 
@@ -113,11 +113,11 @@ The `plugins {}` block configures an instance of `PluginDependenciesSpec`, which
 
 Despite the last line of the previous quote taken from the documentation, the `buildscript {}` block is no longer needed.
 
-	plugins {
-		kotlin("multiplatform") version "1.4.10"
-		id("com.android.library")
-		id("kotlin-android-extensions")
-	}
+    plugins {
+        kotlin("multiplatform") version "1.4.10"
+        id("com.android.library")
+        id("kotlin-android-extensions")
+    }
 
 Applying an Android plugin adds an `android` configuration block, with [various other blocks](https://google.github.io/android-gradle-dsl/current/) available to configure within it.
 
@@ -126,80 +126,80 @@ Applying an Android plugin adds an `android` configuration block, with [various 
 
 You can configure all projects using a block like this:
 
-	allprojects {
-		version = "1.0"
-	}
+    allprojects {
+        version = "1.0"
+    }
 
 or all subprojects:
 
-	subprojects {
-		...
-	}
+    subprojects {
+        ...
+    }
 
 or a specific subproject:
 
-	project(":android") {
-		...
-	}
+    project(":android") {
+        ...
+    }
 
 or even a particular task:
 
-	project(":android").tasks.named("buildJar") {
-		...
-	}
+    project(":android").tasks.named("buildJar") {
+        ...
+    }
 
 ## Tasks
 
 Tasks are composed of `Actions`. 
 
-	task("exampleTask") {
-		println("This happens during configuration.")
+    task("exampleTask") {
+        println("This happens during configuration.")
 
-		doFirst {
-			println("Inserting an action at the head of the execution list, AFTER configuration.")
-		}
+        doFirst {
+            println("Inserting an action at the head of the execution list, AFTER configuration.")
+        }
 
-		doLast {
-			println("This adds an action at the end of the execution list.")
-		}
-	}
+        doLast {
+            println("This adds an action at the end of the execution list.")
+        }
+    }
 
 Tasks can be either eagerly configured or they can use *task configuration avoidance*. 
 Tasks declared with `create` are eagerly configured, tasks that use `register` will use avoidance.
 
 Examples:
 
-	tasks.register("copyAndroidNatives") {
-	    doFirst {
-	        file("libs/armeabi").mkdirs()
-	        file("libs/armeabi-v7a").mkdirs()
-	        file("libs/arm64-v8a").mkdirs()
-	        file("libs/x86_64").mkdirs()
-	        file("libs/x86").mkdirs()
+    tasks.register("copyAndroidNatives") {
+        doFirst {
+            file("libs/armeabi").mkdirs()
+            file("libs/armeabi-v7a").mkdirs()
+            file("libs/arm64-v8a").mkdirs()
+            file("libs/x86_64").mkdirs()
+            file("libs/x86").mkdirs()
 
-	        configurations["natives"].files.forEach { jar ->
-	            var outputDir: File? = null
-	            if (jar.name.endsWith("natives-arm64-v8a.jar")) outputDir = file("libs/arm64-v8a")
-	            if (jar.name.endsWith("natives-armeabi-v7a.jar")) outputDir = file("libs/armeabi-v7a")
-	            if (jar.name.endsWith("natives-armeabi.jar")) outputDir = file("libs/armeabi")
-	            if (jar.name.endsWith("natives-x86_64.jar")) outputDir = file("libs/x86_64")
-	            if (jar.name.endsWith("natives-x86.jar")) outputDir = file("libs/x86")
-	            if (outputDir != null) {
-	                copy {
-	                    from(zipTree(jar))
-	                    into(outputDir)
-	                    include("*.so")
-	                }
-	            }
-	        }
-	    }
-	}
+            configurations["natives"].files.forEach { jar ->
+                var outputDir: File? = null
+                if (jar.name.endsWith("natives-arm64-v8a.jar")) outputDir = file("libs/arm64-v8a")
+                if (jar.name.endsWith("natives-armeabi-v7a.jar")) outputDir = file("libs/armeabi-v7a")
+                if (jar.name.endsWith("natives-armeabi.jar")) outputDir = file("libs/armeabi")
+                if (jar.name.endsWith("natives-x86_64.jar")) outputDir = file("libs/x86_64")
+                if (jar.name.endsWith("natives-x86.jar")) outputDir = file("libs/x86")
+                if (outputDir != null) {
+                    copy {
+                        from(zipTree(jar))
+                        into(outputDir)
+                        include("*.so")
+                    }
+                }
+            }
+        }
+    }
 
-	tasks.whenTaskAdded {
-	    if (name.contains("package")) {
-	        dependsOn("copyAndroidNatives")
-	    }
-	}
+    tasks.whenTaskAdded {
+        if (name.contains("package")) {
+            dependsOn("copyAndroidNatives")
+        }
+    }
 
 ## Final Thoughts
 
